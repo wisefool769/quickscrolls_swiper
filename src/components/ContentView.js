@@ -23,7 +23,7 @@ const ContentView = ({ id, url, isActive }) => {
   }, [isActive, isPlaying]);
 
   return (
-    <video height="100%" id={id} ref={videoRef} loop muted playsinline >
+    <video height="100%" id={id} ref={videoRef} loop muted playsInline >
       <source src={url} type="video/mp4"/>
     </video>
   );
