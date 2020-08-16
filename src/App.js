@@ -25,7 +25,7 @@ const query = gql`
         type: {_eq: "video"},
         score_manual: {_gte: 5}
       },
-      limit: 1
+      limit: 20
     ) {
       file
       thumbnail
@@ -52,7 +52,6 @@ function App() {
     <div className="App">
       <Swiper
         keyboard
-        spaceBetween={50}
         slidesPerView={1}
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}
