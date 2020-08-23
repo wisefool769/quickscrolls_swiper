@@ -40,8 +40,6 @@
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
-
   /* Center slide text vertically */
   display: -webkit-box;
   display: -ms-flexbox;
@@ -66,4 +64,20 @@
   max-height: 100vh;
   min-height: 0;
   min-width: 0;
+}
+
+#overlay {
+  position: absolute;
+  right: 5vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  color: var(--white-color);
+  text-align: center;
+  font-size: var(--big-font);
+  width: 10%;
+  height: 80%;
+  padding: 10px 0;
+  z-index: 2147483647;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import theme from './theme';
 // import { firstVids } from "./firstVids.js";
 
 // Swiper.js
@@ -10,7 +11,9 @@ import 'swiper/swiper.scss';
 // graphql query stuff
 import { useQuery } from "@apollo/react-hooks"
 import gql from 'graphql-tag'
-import { CircularProgress, Typography, Box} from '@material-ui/core';
+import { MuiThemeProvider, CssBaseline, CircularProgress, Typography, Box} from '@material-ui/core';
+
+import { MuteContext } from "./context";
 
 import './styles.css';
 
@@ -34,9 +37,28 @@ const query = gql`
     }
   }
 `
+const useStateWithLocalStorage = ({ localStorageKey, defaultValue }) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(localStorageKey) || defaultValue
+  );
+ 
+  React.useEffect(() => {
+    localStorage.setItem(localStorageKey, value);
+  }, [value, localStorageKey]);
+ 
+  return [value, setValue];
+};
+
 
 function App() {
   const { data, loading, error } = useQuery(query);
+  const [muted, setMuted] = useStateWithLocalStorage(
+    'muted', true
+  );
+  const onToggleMuted = () => {
+    setMuted(!muted);
+  }
+
   if (loading || error || (!data)) return (
     <Box
       display="flex"
@@ -50,24 +72,30 @@ function App() {
 
   return (
     <div className="App">
-      <Swiper
-        keyboard
-        slidesPerView={1}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
-        direction="vertical"
-      >
-      { [ ...Array(data.viral.length).keys() ].map( (i, el) => {
-        // return <ContentView key={i} content={"Slide " + i}/>
-        return (
-          <SwiperSlide key={i}>
-            {({isActive}) => (
-              <ContentView id={i} url={data.viral[i].file} isActive={isActive}/>
-            )}
-          </SwiperSlide>
-        )
-      })}
-      </Swiper>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline>
+          <MuteContext.Provider value={{"muted": muted, "onToggleMuted": onToggleMuted}}>
+            <Swiper
+              keyboard
+              slidesPerView={1}
+              onSlideChange={() => console.log('slide change')}
+              onSwiper={(swiper) => console.log(swiper)}
+              direction="vertical"
+            >
+            { [ ...Array(data.viral.length).keys() ].map( (i, el) => {
+              // return <ContentView key={i} content={"Slide " + i}/>
+              return (
+                <SwiperSlide key={i}>
+                  {({isActive}) => (
+                    <ContentView id={i} url={data.viral[i].file} isActive={isActive}/>
+                  )}
+                </SwiperSlide>
+              )
+            })}
+            </Swiper>
+          </MuteContext.Provider>
+        </CssBaseline>
+      </MuiThemeProvider>
     </div>
   );
 }
