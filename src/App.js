@@ -87,7 +87,7 @@ function App() {
               return (
                 <SwiperSlide key={i}>
                   {({isActive}) => (
-                    <ContentView id={i} url={data.viral[i].file} isActive={isActive}/>
+                    <ContentView id={i} url={data.viral[i].file} isActive={isActive} thumbnailUrl={data.viral[i].thumbnail} />
                   )}
                 </SwiperSlide>
               )
