@@ -1,6 +1,5 @@
 import React from 'react';
 import theme from './theme';
-// import { firstVids } from "./firstVids.js";
 
 // Swiper.js
 import { Swiper, SwiperSlide }  from 'swiper/react';
