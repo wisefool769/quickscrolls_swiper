@@ -13,9 +13,11 @@ import { useQuery } from "@apollo/react-hooks"
 import gql from 'graphql-tag'
 import { MuiThemeProvider, CssBaseline, CircularProgress, Typography, Box} from '@material-ui/core';
 
-import { MuteContext } from "./context";
-
 import './styles.css';
+
+//redux 
+import store from "./store";
+import { Provider } from "react-redux";
 
 
 
@@ -37,27 +39,9 @@ const query = gql`
     }
   }
 `
-const useStateWithLocalStorage = ({ localStorageKey, defaultValue }) => {
-  const [value, setValue] = React.useState(
-    localStorage.getItem(localStorageKey) || defaultValue
-  );
- 
-  React.useEffect(() => {
-    localStorage.setItem(localStorageKey, value);
-  }, [value, localStorageKey]);
- 
-  return [value, setValue];
-};
-
 
 function App() {
   const { data, loading, error } = useQuery(query);
-  const [muted, setMuted] = useStateWithLocalStorage(
-    'muted', true
-  );
-  const onToggleMuted = () => {
-    setMuted(!muted);
-  }
 
   if (loading || error || (!data)) return (
     <Box
@@ -74,12 +58,10 @@ function App() {
     <div className="App">
       <MuiThemeProvider theme={theme}>
         <CssBaseline>
-          <MuteContext.Provider value={{"muted": muted, "onToggleMuted": onToggleMuted}}>
+          <Provider store={store}>
             <Swiper
               keyboard
               slidesPerView={1}
-              onSlideChange={() => console.log('slide change')}
-              onSwiper={(swiper) => console.log(swiper)}
               direction="vertical"
             >
             { [ ...Array(data.viral.length).keys() ].map( (i, el) => {
@@ -93,7 +75,7 @@ function App() {
               )
             })}
             </Swiper>
-          </MuteContext.Provider>
+          </Provider>
         </CssBaseline>
       </MuiThemeProvider>
     </div>

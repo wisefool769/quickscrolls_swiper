@@ -4,10 +4,8 @@ along with the UX for interacting with it
 */
 
 import React, {useRef, useState, useEffect} from 'react';
-import { MuteContext } from "../context";
-
-import VolumeUpIcon from '@material-ui/icons/VolumeUp';
-import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+import VolumeButton from "./VolumeButton";
+import { useSelector } from "react-redux";
 // import PauseIcon from '@material-ui/icons/Pause';
 // import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
@@ -15,7 +13,7 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const { muted, onToggleMuted } = React.useContext(MuteContext);
+  const muted = useSelector(state => state.muted);
 
 
   useEffect(() => {
@@ -46,7 +44,6 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   //   }
   // }
 
-  const VolumeButtonClass = muted ? VolumeOffIcon : VolumeUpIcon;
   // const PlayButtonClass = isPlaying ? PauseIcon : PlayArrowIcon;
 
   // "https://medium.com/@BoltAssaults/autoplay-muted-html5-video-safari-ios-10-in-react-673ae50ba1f5"
@@ -56,7 +53,7 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
         <source src={url} type="video/mp4"/>
       </video>
       <div id="overlay">
-        <VolumeButtonClass onClick={onToggleMuted} fontSize="large"/>
+        <VolumeButton/>
         {/* <PlayButtonClass onClick={onPlayPause} fontSize="large"/> */}
       </div>
     </React.Fragment>
