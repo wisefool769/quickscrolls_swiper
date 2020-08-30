@@ -23,6 +23,7 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
         var promise = videoRef.current.play();
         if(promise !== undefined) {
           promise.catch(error => {
+            console.log(error);
 
           })
         }
