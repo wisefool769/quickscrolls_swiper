@@ -1,6 +1,10 @@
 import React from 'react';
 import theme from './theme';
 
+//redux 
+import store from "./store";
+import { Provider } from "react-redux";
+
 // Swiper.js
 import { Swiper, SwiperSlide }  from 'swiper/react';
 import SwiperCore, { Keyboard } from 'swiper';
@@ -13,10 +17,6 @@ import gql from 'graphql-tag'
 import { MuiThemeProvider, CssBaseline, CircularProgress, Typography, Box} from '@material-ui/core';
 
 import './styles.css';
-
-//redux 
-import store from "./store";
-import { Provider } from "react-redux";
 
 
 
@@ -59,6 +59,7 @@ function App() {
         <CssBaseline>
           <Provider store={store}>
             <Swiper
+              spaceBetween={1}
               keyboard
               slidesPerView={1}
               direction="vertical"

@@ -3,9 +3,12 @@ Encapsulates one specific piece of content, either a video or an image
 along with the UX for interacting with it
 */
 
+import { TOGGLE_MUTE } from "../actions";
 import React, {useRef, useState, useEffect} from 'react';
-import VolumeButton from "./VolumeButton";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 // import PauseIcon from '@material-ui/icons/Pause';
 // import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
@@ -14,12 +17,17 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const muted = useSelector(state => state.muted);
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(isActive) {
       if(!isPlaying) {
-        videoRef.current.play();
+        var promise = videoRef.current.play();
+        if(promise !== undefined) {
+          promise.catch(error => {
+
+          })
+        }
         setIsPlaying(true);
       }
       if(muted) {
@@ -44,6 +52,7 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   //   }
   // }
 
+  const VolumeButtonClass = muted ? VolumeOffIcon : VolumeUpIcon;
   // const PlayButtonClass = isPlaying ? PauseIcon : PlayArrowIcon;
 
   // "https://medium.com/@BoltAssaults/autoplay-muted-html5-video-safari-ios-10-in-react-673ae50ba1f5"
@@ -53,7 +62,7 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
         <source src={url} type="video/mp4"/>
       </video>
       <div id="overlay">
-        <VolumeButton/>
+        <VolumeButtonClass onClick={() => dispatch({ type: TOGGLE_MUTE})} fontSize="large"/>
         {/* <PlayButtonClass onClick={onPlayPause} fontSize="large"/> */}
       </div>
     </React.Fragment>
