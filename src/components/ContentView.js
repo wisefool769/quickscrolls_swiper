@@ -10,33 +10,37 @@ import { useSelector, useDispatch } from "react-redux";
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
+const isSafari = () => {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf("safari") > -1 && ua.indexOf("chrome") < 0;
+};
 
 const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
-  const videoRef = useRef(null);
+  const videoContainerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const muted = useSelector(state => state.muted);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const video= videoContainerRef.current.children[0];
     if(isActive) {
-      if(!isPlaying) {
-        var promise = videoRef.current.play();
+      if(!isPlaying && video) {
+        var promise = video.play();
         if(promise !== undefined) {
           promise.catch(error => {
             console.log(error);
-
           })
         }
         setIsPlaying(true);
       }
       if(muted) {
-        videoRef.current.muted = true;
+        video.muted = true;
       } else {
-        videoRef.current.muted = false;
+        video.muted = false;
       }
     } else {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
+      video.pause();
+      video.currentTime = 0;
       setIsPlaying(false);
     }
   }, [isActive, isPlaying, muted]);
@@ -45,11 +49,22 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   // const PlayButtonClass = isPlaying ? PauseIcon : PlayArrowIcon;
 
   // "https://medium.com/@BoltAssaults/autoplay-muted-html5-video-safari-ios-10-in-react-673ae50ba1f5"
+  const videoHtml = `
+    <video 
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      height="100%"
+      width="100%"
+    >
+      <source src="${url}" type="video/mp4"/>
+    </video>
+  `;
+
   return (
     <React.Fragment>
-      <video height="100%" width="100%" id={id} ref={videoRef} loop playsInline >
-        <source src={url} type="video/mp4"/>
-      </video>
+      <div id={id} ref={videoContainerRef} className="video-container" dangerouslySetInnerHTML={{__html: videoHtml}}/>
       <div id="overlay">
         <VolumeButtonClass onClick={() => dispatch({ type: TOGGLE_MUTE})} fontSize="large"/>
         {/* <PlayButtonClass onClick={onPlayPause} fontSize="large"/> */}
