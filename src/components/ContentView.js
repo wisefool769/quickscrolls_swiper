@@ -9,8 +9,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-// import PauseIcon from '@material-ui/icons/Pause';
-// import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 
 const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
@@ -42,23 +40,13 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
     }
   }, [isActive, isPlaying, muted]);
 
-  // const onPlayPause = () => {
-  //   if(isPlaying) {
-  //     videoRef.current.pause();
-  //     setIsPlaying(false);
-  //   } else {
-  //     setIsPlaying(true);
-  //     videoRef.current.play();
-  //   }
-  // }
-
   const VolumeButtonClass = muted ? VolumeOffIcon : VolumeUpIcon;
   // const PlayButtonClass = isPlaying ? PauseIcon : PlayArrowIcon;
 
   // "https://medium.com/@BoltAssaults/autoplay-muted-html5-video-safari-ios-10-in-react-673ae50ba1f5"
   return (
     <React.Fragment>
-      <video height="100%" width="100%" poster={thumbnailUrl} id={id} ref={videoRef} loop playsInline >
+      <video controls height="100%" width="100%" id={id} ref={videoRef} loop playsInline >
         <source src={url} type="video/mp4"/>
       </video>
       <div id="overlay">
