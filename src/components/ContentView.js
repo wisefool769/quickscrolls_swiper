@@ -46,7 +46,7 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   // "https://medium.com/@BoltAssaults/autoplay-muted-html5-video-safari-ios-10-in-react-673ae50ba1f5"
   return (
     <React.Fragment>
-      <video controls height="100%" width="100%" id={id} ref={videoRef} loop playsInline >
+      <video height="100%" width="100%" id={id} ref={videoRef} loop playsInline >
         <source src={url} type="video/mp4"/>
       </video>
       <div id="overlay">
