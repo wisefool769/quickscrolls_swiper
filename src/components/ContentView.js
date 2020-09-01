@@ -10,10 +10,10 @@ import { useSelector, useDispatch } from "react-redux";
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-const isSafari = () => {
-  const ua = navigator.userAgent.toLowerCase();
-  return ua.indexOf("safari") > -1 && ua.indexOf("chrome") < 0;
-};
+// const isSafari = () => {
+//   const ua = navigator.userAgent.toLowerCase();
+//   return ua.indexOf("safari") > -1 && ua.indexOf("chrome") < 0;
+// };
 
 const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   const videoContainerRef = useRef(null);
@@ -21,17 +21,28 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
   const muted = useSelector(state => state.muted);
   const dispatch = useDispatch();
 
+  const startPlayBack = () => {
+    const video= videoContainerRef.current.children[0];
+    var promise = video.play();
+    if(promise !== undefined) {
+      promise.catch(error => {
+      }).then(() => {
+        setIsPlaying(true);
+      });
+    } else {
+      setIsPlaying(true);
+    }
+  }
+
   useEffect(() => {
     const video= videoContainerRef.current.children[0];
+
+    
     if(isActive) {
       if(!isPlaying && video) {
-        var promise = video.play();
-        if(promise !== undefined) {
-          promise.catch(error => {
-            console.log(error);
-          })
-        }
-        setIsPlaying(true);
+        video.addEventListener('keydown', startPlayBack);
+        video.addEventListener('touchend', startPlayBack);
+        startPlayBack();
       }
       if(muted) {
         video.muted = true;
