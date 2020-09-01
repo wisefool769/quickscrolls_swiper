@@ -18,6 +18,8 @@ import { MuiThemeProvider, CssBaseline, CircularProgress, Typography, Box} from 
 
 import './styles.css';
 
+import "video.js/dist/video-js.css";
+
 
 
 SwiperCore.use([Keyboard]);
