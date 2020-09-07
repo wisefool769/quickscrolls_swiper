@@ -27,23 +27,22 @@ const ContentView = ({ id, url, isActive, thumbnailUrl }) => {
     return videoContainerRef.current.children[0].children[0];
   }
 
-  const startPlayBack = () => {
-    const video= getVideo();
-    console.log(video);
-    var promise = video.play();
-    if(promise !== undefined) {
-      promise.catch(error => {
-      }).then(() => {
-        setIsPlaying(true);
-      });
-    } else {
-      setIsPlaying(true);
-    }
-  }
 
   useEffect(() => {
     const video= getVideo();
-    console.log(video);
+
+    const startPlayBack = () => {
+      var promise = video.play();
+      if(promise !== undefined) {
+        promise.catch(error => {
+        }).then(() => {
+          setIsPlaying(true);
+        });
+      } else {
+        setIsPlaying(true);
+      }
+    }
+
     if(isActive) {
       if(!isPlaying && video) {
         video.addEventListener('keydown', startPlayBack);
